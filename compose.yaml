@@ -37,7 +37,7 @@ services:
       dockerfile: Dockerfile
     image: g1-inventario-web:1.0
     ports:
-      - "8081:80"
+      - "8086:80"
     depends_on:
       api:
         condition: service_healthy
