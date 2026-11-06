@@ -1,0 +1,54 @@
+
+name: g1-inventario
+
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile.prod
+    image: g1-cpus-api:prod
+    restart: unless-stopped
+    environment:
+      APP_NOMBRE: g1-cpus-api
+      DB_PATH: /datos/inventario.db
+    volumes:
+      - datos:/datos
+    networks:
+      - red-g1
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/api/estado', timeout=2)"
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 15s
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 128M
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    image: g1-inventario-web:1.0
+    ports:
+      - "8081:80"
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - red-g1
+
+volumes:
+  datos:
+    name: g1-inventario-datos
+
+networks:
+  red-g1:
+    name: red-g1
+    driver: bridge
