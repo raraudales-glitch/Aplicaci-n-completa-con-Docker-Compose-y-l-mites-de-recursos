@@ -1,0 +1,31 @@
+
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV APP_NOMBRE=g1-cpus-api
+ENV DB_PATH=/datos/inventario.db
+
+WORKDIR /app
+
+RUN groupadd --system app && \
+    useradd --system --gid app --create-home app && \
+    mkdir -p /datos && \
+    chown -R app:app /datos /app
+
+COPY requirements.txt .
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY --chown=app:app app.py .
+
+VOLUME /datos
+
+USER app
+
+EXPOSE 5000
+
+HEALTHCHECK --interval=10s --timeout=3s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/api/estado', timeout=2)" || exit 1
+
+CMD ["gunicorn", "--workers", "2", "--bind", "0.0.0.0:5000", "app:app"]
