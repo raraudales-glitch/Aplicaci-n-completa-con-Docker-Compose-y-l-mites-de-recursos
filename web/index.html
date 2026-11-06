@@ -1,0 +1,289 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupo 1 | Inventario de Procesadores</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f1f5f9;
+            color: #172033;
+        }
+
+        header {
+            background: #10213b;
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0 0 10px;
+        }
+
+        header p {
+            margin: 0;
+            color: #cbd5e1;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 18px #00000010;
+        }
+
+        .encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h2 {
+            margin-top: 0;
+        }
+
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .tabla-contenedor {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 13px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #e8eef7;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .campo {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: 2px solid #93c5fd;
+        }
+
+        .acciones {
+            grid-column: 1 / -1;
+        }
+
+        .mensaje {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .exito {
+            color: #15803d;
+        }
+
+        .error {
+            color: #b91c1c;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            color: #64748b;
+        }
+
+        @media (max-width: 650px) {
+            form {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Inventario de Procesadores</h1>
+        <p>
+            Universidad Tecnológica de Honduras |
+            Arquitectura de Computadoras |
+            Grupo 1
+        </p>
+    </header>
+
+    <main>
+
+        <section>
+            <div class="encabezado">
+                <h2>Procesadores registrados</h2>
+
+                <button id="btnActualizar" type="button">
+                    Actualizar inventario
+                </button>
+            </div>
+
+            <p id="totalProcesadores">
+                Cargando inventario...
+            </p>
+
+            <div class="tabla-contenedor">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Marca</th>
+                            <th>Modelo</th>
+                            <th>Núcleos</th>
+                            <th>Hilos</th>
+                            <th>Frecuencia máxima</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tablaProcesadores">
+                        <tr>
+                            <td colspan="6">
+                                Cargando procesadores...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section>
+            <h2>Registrar nuevo procesador</h2>
+
+            <form id="formProcesador">
+
+                <div class="campo">
+                    <label for="marca">Marca</label>
+                    <input
+                        type="text"
+                        id="marca"
+                        placeholder="Ejemplo: AMD"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="modelo">Modelo</label>
+                    <input
+                        type="text"
+                        id="modelo"
+                        placeholder="Ejemplo: Ryzen 9 7950X"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="nucleos">Número de núcleos</label>
+                    <input
+                        type="number"
+                        id="nucleos"
+                        min="1"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="hilos">Número de hilos</label>
+                    <input
+                        type="number"
+                        id="hilos"
+                        min="1"
+                        required
+                    >
+                </div>
+
+                <div class="campo">
+                    <label for="frecuencia">Frecuencia máxima</label>
+                    <input
+                        type="text"
+                        id="frecuencia"
+                        placeholder="Ejemplo: 5.7 GHz"
+                        required
+                    >
+                </div>
+
+                <div class="acciones">
+                    <button type="submit" id="btnRegistrar">
+                        Registrar procesador
+                    </button>
+                </div>
+
+            </form>
+
+            <p id="mensaje" class="mensaje" role="status"></p>
+        </section>
+
+    </main>
+
+    <footer>
+        Grupo 1 – Procesadores | Tarea 5 – Docker Compose
+    </footer>
+
+    <script src="app.js" defer></script>
+
+</body>
+</html>
